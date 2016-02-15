@@ -458,7 +458,7 @@ public class IndexerJob implements Callable<IndexerJobStatus> {
 			// if fails even after then - shutdown the current IndexerJob
 			logger.error("Error posting messages to Elastic Search for offset {}-->{} " + 
 					" in partition {}:  NoNodeAvailableException - ES cluster is unreachable, will retry to connect after sleeping for {}ms", 
-					offsetForThisRound, nextOffsetToProcess-1, esIndexingRetrySleepTimeMs, currentPartition, e);
+					offsetForThisRound, nextOffsetToProcess-1, currentPartition, esIndexingRetrySleepTimeMs, e);
 			
 			reInitElasticSearch();
 			//throws Exception to re-process current batch
