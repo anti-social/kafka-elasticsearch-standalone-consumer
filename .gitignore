@@ -10,3 +10,7 @@
 *.iml
 kafkaESConsumerLocal.properties
 dependency-reduced-pom.xml
+
+# emacs #
+*~
+\#*#
