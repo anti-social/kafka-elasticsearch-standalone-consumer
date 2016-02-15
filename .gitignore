@@ -4,6 +4,8 @@
 /logs/
 .idea
 .classpath
+.gradle
+/build/
 
 *.iml
 kafkaESConsumerLocal.properties
