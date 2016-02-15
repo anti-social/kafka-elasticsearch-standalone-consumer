@@ -124,19 +124,17 @@ public abstract class MessageHandler {
 			byte[] transformedMessage;
 			try {
 				transformedMessage = this.transformMessage(bytesMessage, messageAndOffset.offset());
+				this.getBuildReqBuilder().add(
+						transformedMessage, 0, transformedMessage.length,
+						indexHandler.getIndexName(null), indexHandler.getIndexType(null));
 			} catch (Exception e) {
 				String msgStr = new String(bytesMessage);
-				logger.error("ERROR transforming message at offset={} - skipping it: {}", 
+				logger.error("ERROR transforming message or building bulk request at offset={} - skipping it: {}", 
 						messageAndOffset.offset(), msgStr, e);
 				FailedEventsLogger.logFailedToTransformEvent(
 						messageAndOffset.offset(), e.getMessage(), msgStr);
 				continue;
 			}
-			this.getBuildReqBuilder().add(
-				esClient.prepareIndex(
-					indexHandler.getIndexName(null), indexHandler.getIndexType(null))
-					.setSource(transformedMessage)
-			);
 			numProcessedMessages++;
 		}
 		logger.info("Total # of messages in this batch: {}; " + 
