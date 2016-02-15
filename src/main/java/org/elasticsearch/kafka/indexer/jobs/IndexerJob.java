@@ -1,11 +1,11 @@
 package org.elasticsearch.kafka.indexer.jobs;
 
+import java.net.InetAddress;
 import java.util.concurrent.Callable;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.transport.NoNodeAvailableException;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.kafka.indexer.ConsumerConfig;
@@ -80,15 +80,15 @@ public class IndexerJob implements Callable<IndexerJobStatus> {
 
 		// TODO add validation of host:port syntax - to avoid Runtime exceptions
 		try {
-			Settings settings = ImmutableSettings.settingsBuilder()
+			Settings settings = Settings.settingsBuilder()
 				.put("cluster.name", consumerConfig.esClusterName)
 				.build();
-			esClient = new TransportClient(settings);
+			esClient = TransportClient.builder().settings(settings).build();
 			for (String eachHostPort : esHostPortList) {
 				logger.info("adding [{}] to TransportClient for partition {}... ", eachHostPort,currentPartition);
 				esClient.addTransportAddress(
 					new InetSocketTransportAddress(
-						eachHostPort.split(":")[0].trim(), 
+                        InetAddress.getByName(eachHostPort.split(":")[0].trim()),
 						Integer.parseInt(eachHostPort.split(":")[1].trim())
 					)
 				);
