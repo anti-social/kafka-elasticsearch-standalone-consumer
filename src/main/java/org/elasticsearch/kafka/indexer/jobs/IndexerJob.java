@@ -245,7 +245,7 @@ public class IndexerJob implements Callable<IndexerJobStatus> {
         		processBatch();
         		// sleep for configured time
         		// TODO improve sleep pattern
-        		Thread.sleep(consumerConfig.consumerSleepBetweenFetchsMs * 1000);
+				Thread.sleep(consumerConfig.consumerSleepBetweenFetchsMs);
         		logger.debug("Completed a round of indexing into ES for partition {}",currentPartition);
         	} catch (IndexerESException e) {
         		indexerJobStatus.setJobStatus(IndexerJobStatusEnum.Failed);
